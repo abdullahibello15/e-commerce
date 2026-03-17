@@ -6,6 +6,7 @@ import { TrustBadges } from "../components/TrustBadges";
 import { Button } from "../components/ui/button";
 import { getFeaturedProducts, getTrendingProducts } from "../data/products";
 import { toast } from "sonner";
+import img from "../assets/banna.png";
 
 export const HomePage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -46,7 +47,12 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <section className="relative bg-linear-to-r from-gray-900 to-gray-700 text-white">
+      <section
+        className="relative  text-white bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${img})`,
+        }}
+      >
         {/* <div className="absolute inset-0 bg-black/60"></div> */}
         <div className="container mx-auto px-4 py-20 md:py-32">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -88,13 +94,6 @@ export const HomePage: React.FC = () => {
                   <span className="text-sm">30-Day Returns</span>
                 </div>
               </div>
-            </div>
-            <div className="hidden md:block">
-              <img
-                src="https://images.unsplash.com/photo-1691967057193-80a98a59b272?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBsaWZlc3R5bGUlMjBzaG9wcGluZ3xlbnwxfHx8fDE3NzM2MzQ5NTB8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Shopping"
-                className="rounded-lg shadow-2xl"
-              />
             </div>
           </div>
         </div>
