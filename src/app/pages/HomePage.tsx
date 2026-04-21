@@ -4,14 +4,13 @@ import { Star, ArrowRight, Check } from "lucide-react";
 import { ProductCard } from "../components/ProductCard";
 import { TrustBadges } from "../components/TrustBadges";
 import { Button } from "../components/ui/button";
-import { getFeaturedProducts, getTrendingProducts } from "../data/products";
+import { useApiProducts } from "../hooks/useApiProducts";
 import { toast } from "sonner";
 import img from "../assets/banna.png";
 
 export const HomePage: React.FC = () => {
   const [email, setEmail] = useState("");
-  const featuredProducts = getFeaturedProducts();
-  const trendingProducts = getTrendingProducts();
+  const { featuredProducts, trendingProducts, loading, error } = useApiProducts();
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
