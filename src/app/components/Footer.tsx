@@ -31,7 +31,7 @@ export const Footer: React.FC = () => {
           <div>
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#e94560_0%,#f0a500_100%)] font-heading text-xl font-bold text-white">
-                J
+                D
               </div>
               <div>
                 <p className="font-heading text-xl font-semibold text-white">droppfive</p>
