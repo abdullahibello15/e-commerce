@@ -272,9 +272,14 @@ export const ProductPage: React.FC = () => {
                 More related products will appear here as matching API results are available.
               </p>
             ) : (
-              <div className="grid gap-6">
-                {relatedProducts.map((relatedProduct) => (
-                  <ProductCard key={relatedProduct.id} product={relatedProduct} />
+              <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:overflow-visible md:px-0 md:pb-0">
+                {relatedProducts.map((relatedProduct, index) => (
+                  <div
+                    key={relatedProduct.id}
+                    className="w-[84vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink md:snap-none"
+                  >
+                    <ProductCard product={relatedProduct} animationIndex={index} />
+                  </div>
                 ))}
               </div>
             )}

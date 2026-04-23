@@ -178,9 +178,11 @@ export const ShopPage: React.FC = () => {
         ) : error ? (
           <InlineError message={error} />
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-            {results.map((product) => (
-              <ProductCard key={product.id} product={product} />
+          <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 xl:grid-cols-4">
+            {results.map((product, index) => (
+              <div key={product.id} className="w-[84vw] max-w-[320px] shrink-0 snap-start sm:w-auto sm:max-w-none sm:shrink sm:snap-none">
+                <ProductCard product={product} animationIndex={index} />
+              </div>
             ))}
           </div>
         )}

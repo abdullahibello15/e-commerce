@@ -202,9 +202,11 @@ export const HomePage: React.FC = () => {
         ) : error ? (
           <InlineError message={error} />
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+          <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 xl:grid-cols-4">
+            {featuredProducts.map((product, index) => (
+              <div key={product.id} className="w-[84vw] max-w-[320px] shrink-0 snap-start sm:w-auto sm:max-w-none sm:shrink sm:snap-none">
+                <ProductCard product={product} animationIndex={index} />
+              </div>
             ))}
           </div>
         )}
@@ -241,9 +243,11 @@ export const HomePage: React.FC = () => {
         ) : error ? (
           <InlineError message={error} />
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {trendingProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+          <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 xl:grid-cols-4">
+            {trendingProducts.map((product, index) => (
+              <div key={product.id} className="w-[84vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink md:snap-none">
+                <ProductCard product={product} animationIndex={index} />
+              </div>
             ))}
           </div>
         )}

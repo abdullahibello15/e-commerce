@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 
 interface ProductCardProps {
   product: Product;
+  animationIndex?: number;
 }
 
 const badgeStyles: Record<NonNullable<Product['badge']>, string> = {
@@ -17,7 +18,7 @@ const badgeStyles: Record<NonNullable<Product['badge']>, string> = {
   'Out of Stock': 'bg-red-600 text-white',
 };
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, animationIndex = 0 }) => {
   const { addToCart, isWishlisted, toggleWishlist } = useCart();
 
   const handleAddToCart = (event: React.MouseEvent) => {
@@ -40,13 +41,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <Link
       to={`/product/${product.slug}`}
       state={{ product }}
-      className="group block rounded-[30px] border border-slate-200 bg-white p-3 shadow-[0_18px_50px_rgba(15,23,42,0.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(15,23,42,0.1)]"
+      className="product-card-entrance group block rounded-[30px] border border-slate-200 bg-white p-3 shadow-[0_18px_50px_rgba(15,23,42,0.05)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_70px_rgba(15,23,42,0.12)]"
+      style={{ animationDelay: `${Math.min(animationIndex, 7) * 90}ms` }}
     >
       <div className="relative overflow-hidden rounded-[24px] bg-slate-100">
+        <div className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,0.18)_35%,transparent_62%)] opacity-0 transition duration-700 group-hover:translate-x-full group-hover:opacity-100 -translate-x-full" />
         <img
           src={product.image}
           alt={product.name}
-          className="aspect-[4/4.4] w-full object-cover transition duration-500 group-hover:scale-105"
+          className="aspect-[4/4.4] w-full object-cover transition duration-700 group-hover:scale-[1.08]"
         />
 
         {product.badge && (
