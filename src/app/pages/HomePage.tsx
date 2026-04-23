@@ -8,6 +8,7 @@ import { InlineError, ProductGridSkeleton, TextBlockSkeleton } from '../componen
 import { categoryEmojis } from '../lib/api';
 import { useApiProducts } from '../hooks/useApiProducts';
 import { toast } from 'sonner';
+import bannerImage from '../assets/banner.png';
 
 const trustBadges = [
   {
@@ -52,7 +53,7 @@ export const HomePage: React.FC = () => {
   return (
     <div className="pb-4">
       <section className="section-shell grid gap-8 pb-12 pt-8 md:pb-16 md:pt-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-        <div data-reveal className="rounded-[36px] bg-[linear-gradient(135deg,#14182e_0%,#1a1a2e_42%,#e94560_100%)] p-8 text-white shadow-[0_30px_90px_rgba(15,23,42,0.22)] md:p-12">
+        <div data-reveal className="order-2 rounded-[36px] bg-[linear-gradient(135deg,#14182e_0%,#1a1a2e_42%,#e94560_100%)] p-8 text-white shadow-[0_30px_90px_rgba(15,23,42,0.22)] md:p-12 lg:order-1">
           {loading ? (
             <TextBlockSkeleton lines={6} />
           ) : error ? (
@@ -110,7 +111,7 @@ export const HomePage: React.FC = () => {
           )}
         </div>
 
-        <div data-reveal className="grid gap-4">
+        <div data-reveal className="order-1 grid gap-4 lg:order-2">
           <div className="glass-panel rounded-[32px] p-4 shadow-[0_20px_70px_rgba(15,23,42,0.08)]">
             {loading ? (
               <div className="h-[390px] rounded-[28px] bg-white/50" />
@@ -120,8 +121,8 @@ export const HomePage: React.FC = () => {
               </div>
             ) : (
               <img
-                src={heroProduct.image}
-                alt={heroProduct.name}
+                src={bannerImage}
+                alt="droppfive banner"
                 className="h-[390px] w-full rounded-[28px] object-cover"
               />
             )}
