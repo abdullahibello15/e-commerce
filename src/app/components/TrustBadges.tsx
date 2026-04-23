@@ -1,41 +1,28 @@
 import React from 'react';
-import { Shield, Truck, RotateCcw, CreditCard } from 'lucide-react';
+import { CreditCard, Headphones, RotateCcw, Truck } from 'lucide-react';
+import { TrustBadge } from '../data/products';
 
-export const TrustBadges: React.FC = () => {
-  const badges = [
-    {
-      icon: Shield,
-      title: 'Secure Payment',
-      description: '100% secure checkout',
-    },
-    {
-      icon: Truck,
-      title: 'Fast Shipping',
-      description: 'Free shipping over $50',
-    },
-    {
-      icon: RotateCcw,
-      title: '30-Day Returns',
-      description: 'Money-back guarantee',
-    },
-    {
-      icon: CreditCard,
-      title: 'Safe & Secure',
-      description: 'SSL encrypted',
-    },
-  ];
+const iconMap = [Truck, CreditCard, RotateCcw, Headphones];
 
+export const TrustBadges: React.FC<{ badges: TrustBadge[] }> = ({ badges }) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {badges.map((badge, index) => (
-        <div key={index} className="flex flex-col items-center text-center p-4">
-          <div className="mb-3 p-3 bg-gray-100 rounded-full">
-            <badge.icon className="h-6 w-6 text-gray-900" />
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {badges.map((badge, index) => {
+        const Icon = iconMap[index % iconMap.length];
+
+        return (
+          <div
+            key={badge.id}
+            className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_12px_35px_rgba(15,23,42,0.05)]"
+          >
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-[#e94560]">
+              <Icon className="h-5 w-5" />
+            </div>
+            <h3 className="font-heading text-lg font-semibold text-slate-950">{badge.title}</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-600">{badge.description}</p>
           </div>
-          <h4 className="font-semibold text-gray-900 mb-1">{badge.title}</h4>
-          <p className="text-sm text-gray-600">{badge.description}</p>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

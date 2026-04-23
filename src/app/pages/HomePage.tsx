@@ -1,73 +1,81 @@
-import React, { useState } from "react";
-import { Link } from "react-router";
-import { Star, ArrowRight, Check } from "lucide-react";
-import { ProductCard } from "../components/ProductCard";
-import { TrustBadges } from "../components/TrustBadges";
-import { Button } from "../components/ui/button";
-import { useApiProducts } from "../hooks/useApiProducts";
-import { toast } from "sonner";
-import img from "../assets/banna.png";
+import React, { useState } from 'react';
+import { Link } from 'react-router';
+import { ArrowRight, Database, Package, Search, Sparkles, Star, TrendingUp } from 'lucide-react';
+import { ProductCard } from '../components/ProductCard';
+import { TrustBadges } from '../components/TrustBadges';
+import { Button } from '../components/ui/button';
+import { InlineError, ProductGridSkeleton, TextBlockSkeleton } from '../components/ApiStates';
+import { categoryEmojis } from '../lib/api';
+import { useApiProducts } from '../hooks/useApiProducts';
+import { toast } from 'sonner';
+
+const trustBadges = [
+  {
+    id: 'inventory',
+    title: 'Live Inventory',
+    description: 'Product cards update from the live catalog instead of placeholder stock numbers.',
+  },
+  {
+    id: 'pricing',
+    title: 'Real Pricing',
+    description: 'Every price range comes directly from the supplier feed using the sellPrice field.',
+  },
+  {
+    id: 'search',
+    title: 'Search Ready',
+    description: 'Shoppers can search by product name through the API keyword parameter.',
+  },
+  {
+    id: 'catalog',
+    title: 'Paged Catalog',
+    description: 'The storefront now browses the full multi-page product feed from the backend.',
+  },
+];
 
 export const HomePage: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const { featuredProducts, trendingProducts, loading, error } = useApiProducts();
+  const [email, setEmail] = useState('');
+  const { featuredProducts, trendingProducts, categories, totalPages, totalRecords, loading, error } =
+    useApiProducts({
+      pageNumber: 1,
+      pageSize: 12,
+    });
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      toast.success("Thank you for subscribing!");
-      setEmail("");
-    }
+  const heroProduct = featuredProducts[0];
+  const inStockCount = featuredProducts.filter((product) => product.inStock).length;
+
+  const handleNewsletterSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    toast.success('Subscription submitted.');
+    setEmail('');
   };
 
-  const testimonials = [
-    {
-      name: "Jennifer L.",
-      rating: 5,
-      comment:
-        "Amazing products and fast shipping! I've ordered three times and every experience has been perfect.",
-      date: "March 14, 2026",
-    },
-    {
-      name: "Mark D.",
-      rating: 5,
-      comment:
-        "Great quality at unbeatable prices. The customer service is also top-notch!",
-      date: "March 12, 2026",
-    },
-    {
-      name: "Sophia R.",
-      rating: 5,
-      comment:
-        "I love this store! The products are exactly as described and delivery is always quick.",
-      date: "March 10, 2026",
-    },
-  ];
-
   return (
-    <div className="min-h-screen">
-      <section
-        className="relative  text-white bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url(${img})`,
-        }}
-      >
-        {/* <div className="absolute inset-0 bg-black/60"></div> */}
-        <div className="container mx-auto px-4 py-20 md:py-32">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Discover Amazing Products at Best Prices
+    <div className="pb-4">
+      <section className="section-shell grid gap-8 pb-12 pt-8 md:pb-16 md:pt-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <div data-reveal className="rounded-[36px] bg-[linear-gradient(135deg,#14182e_0%,#1a1a2e_42%,#e94560_100%)] p-8 text-white shadow-[0_30px_90px_rgba(15,23,42,0.22)] md:p-12">
+          {loading ? (
+            <TextBlockSkeleton lines={6} />
+          ) : error ? (
+            <InlineError message={error} />
+          ) : (
+            <>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-white/90">
+                <Sparkles className="h-4 w-4 text-[#f0a500]" />
+                Live products. Real pricing. Zero mock catalog data.
+              </div>
+
+              <h1 className="font-heading mt-6 max-w-xl text-5xl font-bold tracking-tight md:text-6xl">
+                Premium finds powered by a live multi-page product feed
               </h1>
-              <p className="text-xl mb-8 text-gray-300">
-                Shop innovative solutions for everyday life. Quality products,
-                unbeatable prices, and fast shipping.
+              <p className="mt-5 max-w-2xl text-base leading-7 text-white/78 md:text-lg">
+                droppfive now pulls inventory, product names, prices, search results, and stock status directly from the live backend so customers always browse real catalog data.
               </p>
-              <div className="flex flex-wrap gap-4">
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button
-                  size="lg"
                   asChild
-                  className="bg-white text-gray-900 hover:bg-gray-100"
+                  size="lg"
+                  className="rounded-full bg-[#f0a500] px-7 text-slate-950 hover:bg-[#ffb81a]"
                 >
                   <Link to="/shop">
                     Shop Now
@@ -75,158 +83,248 @@ export const HomePage: React.FC = () => {
                   </Link>
                 </Button>
                 <Button
+                  asChild
                   size="lg"
                   variant="outline"
-                  asChild
-                  className="border-white text-white hover:bg-white hover:text-gray-900"
+                  className="rounded-full border-white/20 bg-white/8 px-7 text-white hover:bg-white hover:text-slate-950"
                 >
                   <Link to="/about">Learn More</Link>
                 </Button>
               </div>
-              <div className="mt-8 flex items-center gap-6">
-                <div className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
-                  <span className="text-sm">Free Shipping Over $50</span>
+
+              <div className="mt-10 grid gap-4 sm:grid-cols-3">
+                <div className="rounded-[24px] border border-white/10 bg-white/8 p-4">
+                  <p className="text-3xl font-bold">{totalRecords.toLocaleString()}+</p>
+                  <p className="mt-1 text-sm text-white/70">Products in the live feed</p>
                 </div>
-                <div className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
-                  <span className="text-sm">30-Day Returns</span>
+                <div className="rounded-[24px] border border-white/10 bg-white/8 p-4">
+                  <p className="text-3xl font-bold">{totalPages}</p>
+                  <p className="mt-1 text-sm text-white/70">Browseable catalog pages</p>
+                </div>
+                <div className="rounded-[24px] border border-white/10 bg-white/8 p-4">
+                  <p className="text-3xl font-bold">{inStockCount}</p>
+                  <p className="mt-1 text-sm text-white/70">In-stock picks featured now</p>
                 </div>
               </div>
+            </>
+          )}
+        </div>
+
+        <div data-reveal className="grid gap-4">
+          <div className="glass-panel rounded-[32px] p-4 shadow-[0_20px_70px_rgba(15,23,42,0.08)]">
+            {loading ? (
+              <div className="h-[390px] rounded-[28px] bg-white/50" />
+            ) : error || !heroProduct ? (
+              <div className="flex h-[390px] items-center justify-center rounded-[28px] bg-white/50">
+                <InlineError message={error ?? 'No products found'} />
+              </div>
+            ) : (
+              <img
+                src={heroProduct.image}
+                alt={heroProduct.name}
+                className="h-[390px] w-full rounded-[28px] object-cover"
+              />
+            )}
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_40px_rgba(15,23,42,0.05)]">
+              <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+                <Database className="h-5 w-5" />
+              </div>
+              <h2 className="font-heading text-xl font-semibold text-slate-950">Live catalog source</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Product names, images, inventory counts, and price ranges come straight from the backend feed.
+              </p>
+            </div>
+            <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_18px_40px_rgba(15,23,42,0.05)]">
+              <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-[#f0a500]">
+                <TrendingUp className="h-5 w-5" />
+              </div>
+              <h2 className="font-heading text-xl font-semibold text-slate-950">Search-backed discovery</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                The shop page now searches the API directly and paginates through the full product catalog.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-12 border-b">
-        <div className="container mx-auto px-4">
-          <TrustBadges />
+      <section data-reveal className="section-shell py-8 md:py-12">
+        <div className="mb-8 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#e94560]">Categories</p>
+            <h2 className="font-heading mt-3 text-3xl font-bold text-slate-950 md:text-4xl">
+              Explore live catalog categories
+            </h2>
+          </div>
         </div>
+
+        {loading ? (
+          <ProductGridSkeleton count={5} />
+        ) : error ? (
+          <InlineError message={error} />
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+            {categories.map((category, index) => (
+              <Link
+                key={category.id}
+                to={`/shop?category=${encodeURIComponent(category.name)}`}
+                className={`rounded-[30px] border border-slate-200 bg-gradient-to-br ${category.accent ?? ''} p-6 shadow-[0_18px_40px_rgba(15,23,42,0.04)] transition duration-300 hover:-translate-y-1`}
+              >
+                <div className="text-4xl">{category.emoji ?? categoryEmojis[index % categoryEmojis.length]}</div>
+                <h3 className="font-heading mt-5 text-xl font-semibold text-slate-950">{category.name}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  {category.description ?? 'Browse this category in the live API feed.'}
+                </p>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Featured Products
+      <section data-reveal className="section-shell py-10 md:py-14">
+        <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#e94560]">Featured</p>
+            <h2 className="font-heading mt-3 text-3xl font-bold text-slate-950 md:text-4xl">
+              Featured products
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Handpicked products that our customers love. Limited-time offers
-              available!
-            </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          <p className="max-w-xl text-sm leading-6 text-slate-600">
+            The first products from the live API are rendered here without any placeholder catalog arrays.
+          </p>
+        </div>
+
+        {loading ? (
+          <ProductGridSkeleton count={8} />
+        ) : error ? (
+          <InlineError message={error} />
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {featuredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
-          <div className="text-center mt-12">
-            <Button size="lg" variant="outline" asChild>
-              <Link to="/shop">View All Products</Link>
-            </Button>
+        )}
+      </section>
+
+      <section data-reveal className="section-shell py-10 md:py-14">
+        <div className="rounded-[36px] bg-[#f8fafc] p-6 md:p-8">
+          <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#e94560]">Trust</p>
+              <h2 className="font-heading mt-3 text-3xl font-bold text-slate-950 md:text-4xl">
+                Why shop with us
+              </h2>
+            </div>
+            <p className="max-w-xl text-sm leading-6 text-slate-600">
+              The experience stays the same, but the storefront is now driven by real API data.
+            </p>
           </div>
+
+          <TrustBadges badges={trustBadges} />
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Trending Now
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              The hottest products everyone is talking about. Get them before
-              they're gone!
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section data-reveal className="section-shell py-10 md:py-14">
+        <div className="mb-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#e94560]">Trending</p>
+          <h2 className="font-heading mt-3 text-3xl font-bold text-slate-950 md:text-4xl">
+            Trending now
+          </h2>
+        </div>
+
+        {loading ? (
+          <ProductGridSkeleton count={4} />
+        ) : error ? (
+          <InlineError message={error} />
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {trendingProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
-        </div>
+        )}
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              What Our Customers Say
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Don't just take our word for it - hear from our satisfied
-              customers!
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm"
+      <section data-reveal className="section-shell py-10 md:py-14">
+        <div className="mb-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#e94560]">Live highlights</p>
+          <h2 className="font-heading mt-3 text-3xl font-bold text-slate-950 md:text-4xl">
+            Real catalog signals customers can trust
+          </h2>
+        </div>
+
+        {loading ? (
+          <ProductGridSkeleton count={3} />
+        ) : error ? (
+          <InlineError message={error} />
+        ) : (
+          <div className="grid gap-6 lg:grid-cols-3">
+            {featuredProducts.slice(0, 3).map((product) => (
+              <article
+                key={product.id}
+                className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)]"
               >
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-5 w-5 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
+                <div className="flex items-center gap-4">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="h-16 w-16 rounded-2xl object-cover"
+                  />
+                  <div>
+                    <p className="font-heading text-lg font-semibold text-slate-950">{product.name}</p>
+                    <p className="text-sm text-slate-500">{product.sku || 'No SKU available'}</p>
+                  </div>
                 </div>
-                <p className="text-gray-700 mb-4 italic">
-                  "{testimonial.comment}"
+                <div className="mt-5 flex items-center gap-1 text-[#f0a500]">
+                  <Star className="h-4 w-4 fill-current" />
+                  <span className="text-sm font-semibold text-slate-800">
+                    {product.inStock ? 'In stock' : 'Out of stock'}
+                  </span>
+                </div>
+                <p className="mt-4 text-sm leading-7 text-slate-600">
+                  Price: {product.displayPrice}
                 </p>
-                <div className="flex items-center justify-between">
-                  <p className="font-semibold text-gray-900">
-                    {testimonial.name}
-                  </p>
-                  <p className="text-sm text-gray-500">{testimonial.date}</p>
-                </div>
-              </div>
+                <p className="mt-2 text-sm leading-7 text-slate-600">
+                  Inventory: {product.stock.toLocaleString()} units
+                </p>
+              </article>
             ))}
           </div>
-          <div className="text-center mt-8">
-            <div className="inline-flex items-center gap-2 text-gray-600">
-              <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-              <span className="font-semibold">4.8 out of 5</span>
-              <span>based on 5,000+ reviews</span>
-            </div>
-          </div>
-        </div>
+        )}
       </section>
 
-      <section className="py-16 bg-gray-900 text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Join Our Newsletter
-            </h2>
-            <p className="text-gray-300 mb-8">
-              Get exclusive offers, early access to new products, and insider
-              deals delivered to your inbox.
-            </p>
-            <form
-              onSubmit={handleNewsletterSubmit}
-              className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
-            >
+      <section data-reveal className="section-shell py-10 md:py-14">
+        <div className="rounded-[36px] bg-[linear-gradient(135deg,#111827_0%,#1a1a2e_45%,#f8fafc_170%)] px-6 py-10 text-white md:px-10">
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-white/90">
+                <Search className="h-4 w-4 text-[#f0a500]" />
+                Get 10% Off
+              </p>
+              <h2 className="font-heading mt-5 text-3xl font-bold md:text-4xl">
+                Join the droppfive list for first access to fresh finds
+              </h2>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-white/75">
+                Keep the same conversion-focused signup section while the storefront data layer runs on the live API.
+              </p>
+            </div>
+
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-3 sm:min-w-[360px] sm:flex-row">
               <input
                 type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 required
-                className="flex-1 px-6 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-gray-500"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="Enter your email"
+                className="h-13 min-h-[52px] flex-1 rounded-full border border-white/20 bg-white/10 px-5 text-sm text-white outline-none placeholder:text-white/55 focus:border-[#f0a500]"
               />
-              <Button
-                type="submit"
-                size="lg"
-                className="bg-white text-gray-900 hover:bg-gray-100"
-              >
+              <Button type="submit" className="h-13 min-h-[52px] rounded-full bg-[#f0a500] px-7 text-slate-950 hover:bg-[#ffb81a]">
                 Subscribe
               </Button>
             </form>
-            <p className="text-sm text-gray-400 mt-4">
-              We respect your privacy. Unsubscribe at any time.
-            </p>
           </div>
         </div>
       </section>

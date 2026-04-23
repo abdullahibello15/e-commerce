@@ -3,28 +3,28 @@
 :root {
   --font-size: 16px;
   --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
+  --foreground: #333333;
   --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: #030213;
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
-  --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
+  --card-foreground: #333333;
+  --popover: #ffffff;
+  --popover-foreground: #333333;
+  --primary: #1a1a2e;
+  --primary-foreground: #ffffff;
+  --secondary: #f9f9f9;
+  --secondary-foreground: #1a1a2e;
+  --muted: #f5f5f7;
+  --muted-foreground: #6b7280;
+  --accent: #fff2f4;
+  --accent-foreground: #1a1a2e;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
   --border: rgba(0, 0, 0, 0.1);
-  --input: transparent;
-  --input-background: #f3f3f5;
+  --input: #ffffff;
+  --input-background: #f8fafc;
   --switch-background: #cbced4;
-  --font-weight-medium: 500;
+  --font-weight-medium: 600;
   --font-weight-normal: 400;
-  --ring: oklch(0.708 0 0);
+  --ring: #e94560;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -126,6 +126,8 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Inter", "Open Sans", "Segoe UI", sans-serif;
+    scroll-behavior: smooth;
   }
 
   /**
@@ -139,20 +141,20 @@
 
   h1 {
     font-size: var(--text-2xl);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
+    font-weight: 700;
+    line-height: 1.1;
   }
 
   h2 {
     font-size: var(--text-xl);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
+    font-weight: 700;
+    line-height: 1.15;
   }
 
   h3 {
     font-size: var(--text-lg);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
+    font-weight: 600;
+    line-height: 1.2;
   }
 
   h4 {
@@ -177,5 +179,42 @@
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background: rgba(233, 69, 96, 0.18);
+  }
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: "Poppins", "Montserrat", "Inter", sans-serif;
+  }
+
+  .section-shell {
+    @apply mx-auto max-w-7xl px-4 md:px-6;
+  }
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
+  }
+
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .glass-panel {
+    @apply border border-white/50 bg-white/75 backdrop-blur-xl;
   }
 }

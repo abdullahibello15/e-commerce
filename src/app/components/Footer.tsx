@@ -1,118 +1,120 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Facebook, Instagram, Twitter, Mail } from 'lucide-react';
+import { Facebook, Instagram, Mail, ShieldCheck, Truck, Twitter } from 'lucide-react';
+
+const footerLinks = {
+  shop: [
+    { label: 'Shop All', to: '/shop' },
+    { label: 'Beauty & Skincare', to: '/shop?category=Beauty%20%26%20Skincare' },
+    { label: 'Fitness & Sports', to: '/shop?category=Fitness%20%26%20Sports' },
+    { label: 'Tech Accessories', to: '/shop?category=Tech%20Accessories' },
+  ],
+  company: [
+    { label: 'About Us', to: '/about' },
+    { label: 'Cart', to: '/cart' },
+    { label: 'Checkout', to: '/checkout' },
+    { label: 'Track Order', to: '/track-order' },
+  ],
+  support: [
+    { label: 'Shipping Policy', to: '/shipping-policy' },
+    { label: 'Refund Policy', to: '/refund-policy' },
+    { label: 'Privacy Policy', to: '/privacy-policy' },
+    { label: 'Terms of Service', to: '/terms-of-service' },
+  ],
+};
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 mt-20">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Company Info */}
+    <footer className="mt-20 bg-[#111427] text-slate-300">
+      <div className="mx-auto max-w-7xl px-4 py-14 md:px-6">
+        <div className="grid gap-10 lg:grid-cols-[1.25fr_repeat(3,1fr)]">
           <div>
-            <h3 className="text-white text-lg font-bold mb-4">BestPriceCenter</h3>
-            <p className="text-sm mb-4">
-              Your trusted source for quality products at the best prices. We're committed to
-              bringing you innovative solutions for everyday life.
+            <div className="mb-5 flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#e94560_0%,#f0a500_100%)] font-heading text-xl font-bold text-white">
+                J
+              </div>
+              <div>
+                <p className="font-heading text-xl font-semibold text-white">droppfive</p>
+                <p className="text-sm text-slate-400">Five niches. One polished shopping experience.</p>
+              </div>
+            </div>
+
+            <p className="max-w-md text-sm leading-6 text-slate-400">
+              droppfive blends trusted essentials with boutique presentation, making it easier to
+              discover premium beauty, wellness, home, fitness, and tech finds in one place.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="hover:text-white transition-colors" aria-label="Facebook">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="hover:text-white transition-colors" aria-label="Instagram">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="hover:text-white transition-colors" aria-label="Twitter">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="hover:text-white transition-colors" aria-label="Email">
-                <Mail className="h-5 w-5" />
-              </a>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm">
+                <Truck className="h-4 w-4 text-[#f0a500]" />
+                Fast shipping
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm">
+                <ShieldCheck className="h-4 w-4 text-[#f0a500]" />
+                Secure checkout
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-3">
+              {[Facebook, Instagram, Twitter, Mail].map((Icon, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  aria-label="Social link"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 transition hover:border-[#e94560] hover:text-white"
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link to="/" className="hover:text-white transition-colors">
-                  Home
+            <h3 className="font-heading text-lg font-semibold text-white">Shop</h3>
+            <div className="mt-4 flex flex-col gap-3 text-sm">
+              {footerLinks.shop.map((link) => (
+                <Link key={link.label} to={link.to} className="transition hover:text-white">
+                  {link.label}
                 </Link>
-              </li>
-              <li>
-                <Link to="/shop" className="hover:text-white transition-colors">
-                  Shop
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="hover:text-white transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="hover:text-white transition-colors">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link to="/track-order" className="hover:text-white transition-colors">
-                  Track Order
-                </Link>
-              </li>
-            </ul>
+              ))}
+            </div>
           </div>
 
-          {/* Customer Service */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Customer Service</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link to="/shipping-policy" className="hover:text-white transition-colors">
-                  Shipping Policy
+            <h3 className="font-heading text-lg font-semibold text-white">Company</h3>
+            <div className="mt-4 flex flex-col gap-3 text-sm">
+              {footerLinks.company.map((link) => (
+                <Link key={link.label} to={link.to} className="transition hover:text-white">
+                  {link.label}
                 </Link>
-              </li>
-              <li>
-                <Link to="/refund-policy" className="hover:text-white transition-colors">
-                  Refund Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/privacy-policy" className="hover:text-white transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms-of-service" className="hover:text-white transition-colors">
-                  Terms of Service
-                </Link>
-              </li>
-            </ul>
+              ))}
+            </div>
           </div>
 
-          {/* Newsletter */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Newsletter</h4>
-            <p className="text-sm mb-4">
-              Subscribe to get special offers, free giveaways, and updates.
-            </p>
-            <form className="flex flex-col space-y-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="px-4 py-2 rounded bg-gray-800 text-white text-sm border border-gray-700 focus:outline-none focus:border-gray-500"
-              />
-              <button
-                type="submit"
-                className="px-4 py-2 bg-white text-gray-900 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
+            <h3 className="font-heading text-lg font-semibold text-white">Support</h3>
+            <div className="mt-4 flex flex-col gap-3 text-sm">
+              {footerLinks.support.map((link) => (
+                <Link key={link.label} to={link.to} className="transition hover:text-white">
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-8 rounded-[28px] border border-white/10 bg-white/5 p-5">
+              <p className="text-sm font-semibold text-white">We accept</p>
+              <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">
+                <span className="rounded-full border border-white/10 px-3 py-2">Visa</span>
+                <span className="rounded-full border border-white/10 px-3 py-2">Mastercard</span>
+                <span className="rounded-full border border-white/10 px-3 py-2">PayPal</span>
+                <span className="rounded-full border border-white/10 px-3 py-2">Apple Pay</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} BestPriceCenter. All rights reserved.</p>
+        <div className="mt-10 border-t border-white/10 pt-6 text-sm text-slate-500">
+          <p>&copy; {new Date().getFullYear()} droppfive. Crafted for confident online shopping.</p>
         </div>
       </div>
     </footer>

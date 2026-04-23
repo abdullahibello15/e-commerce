@@ -5,68 +5,53 @@ import { Button } from '../components/ui/button';
 
 export const OrderConfirmationPage: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const orderNumber = searchParams.get('order') || 'BP00000000';
+  const orderNumber = searchParams.get('order') || 'Pending';
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto">
-          {/* Success Message */}
-          <div className="text-center mb-8">
-            <CheckCircle className="h-20 w-20 text-green-600 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Order Confirmed!</h1>
-            <p className="text-gray-600">
-              Thank you for your purchase. Your order has been received and is being processed.
-            </p>
-          </div>
-
-          {/* Order Details */}
-          <div className="bg-white rounded-lg border border-gray-200 p-8 mb-6">
-            <div className="mb-6">
-              <p className="text-sm text-gray-600 mb-1">Order Number</p>
-              <p className="text-2xl font-bold text-gray-900">{orderNumber}</p>
-            </div>
-
-            <div className="border-t pt-6 space-y-4">
-              <div className="flex items-start gap-4">
-                <Package className="h-6 w-6 text-gray-400 mt-1" />
-                <div>
-                  <p className="font-semibold text-gray-900 mb-1">Processing Your Order</p>
-                  <p className="text-sm text-gray-600">
-                    We're getting your items ready for shipment. You'll receive a confirmation email
-                    with tracking information once your order ships.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <Truck className="h-6 w-6 text-gray-400 mt-1" />
-                <div>
-                  <p className="font-semibold text-gray-900 mb-1">Estimated Delivery</p>
-                  <p className="text-sm text-gray-600">
-                    Your order will be delivered within 5-7 business days. Track your order anytime
-                    using the order number above.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="flex-1 bg-gray-900 hover:bg-gray-800">
-              <Link to={`/track-order?order=${orderNumber}`}>Track Your Order</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="flex-1">
-              <Link to="/shop">Continue Shopping</Link>
-            </Button>
-          </div>
-
-          {/* Email Notice */}
-          <p className="text-center text-sm text-gray-600 mt-6">
-            A confirmation email has been sent to your email address with order details.
+    <div className="section-shell py-10 md:py-14">
+      <div className="mx-auto max-w-3xl">
+        <section data-reveal className="rounded-[36px] bg-white p-8 text-center shadow-[0_18px_60px_rgba(15,23,42,0.06)] md:p-10">
+          <CheckCircle className="mx-auto h-20 w-20 text-emerald-500" />
+          <h1 className="font-heading mt-6 text-4xl font-bold text-slate-950">Order confirmed</h1>
+          <p className="mt-3 text-sm leading-7 text-slate-500 md:text-base">
+            Thank you for shopping with droppfive. Your order is in progress and a confirmation email will arrive shortly.
           </p>
-        </div>
+
+          <div className="mt-8 rounded-[28px] bg-slate-50 p-6 text-left">
+            <p className="text-sm uppercase tracking-[0.24em] text-slate-400">Order number</p>
+            <p className="mt-2 text-3xl font-bold text-slate-950">{orderNumber}</p>
+
+            <div className="mt-6 space-y-5">
+              <div className="flex items-start gap-4">
+                <Package className="mt-1 h-6 w-6 text-[#e94560]" />
+                <div>
+                  <p className="font-semibold text-slate-950">We’re preparing your items</p>
+                  <p className="mt-1 text-sm leading-6 text-slate-500">
+                    Our team is reviewing and packing your order for dispatch.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <Truck className="mt-1 h-6 w-6 text-[#e94560]" />
+                <div>
+                  <p className="font-semibold text-slate-950">Tracking updates are next</p>
+                  <p className="mt-1 text-sm leading-6 text-slate-500">
+                    Once your order ships, we’ll send delivery updates and tracking details by email.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Button asChild className="h-12 flex-1 rounded-full bg-slate-950 text-white hover:bg-[#e94560]">
+              <Link to={`/track-order?order=${orderNumber}`}>Track your order</Link>
+            </Button>
+            <Button asChild variant="outline" className="h-12 flex-1 rounded-full">
+              <Link to="/shop">Continue shopping</Link>
+            </Button>
+          </div>
+        </section>
       </div>
     </div>
   );

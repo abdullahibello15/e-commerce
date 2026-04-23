@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { CreditCard, Lock } from 'lucide-react';
+import { CheckCircle2, CreditCard, Lock } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -12,241 +12,197 @@ export const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState('card');
 
-  const subtotal = getCartTotal();
-  const shipping = subtotal > 50 ? 0 : 9.99;
-  const total = subtotal + shipping;
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Generate a mock order number
-    const orderNumber = `BP${Date.now().toString().slice(-8)}`;
-    
-    // Clear cart and redirect
-    clearCart();
-    toast.success('Order placed successfully!');
-    navigate(`/order-confirmation?order=${orderNumber}`);
-  };
+  useEffect(() => {
+    if (items.length === 0) {
+      navigate('/cart');
+    }
+  }, [items.length, navigate]);
 
   if (items.length === 0) {
-    navigate('/cart');
     return null;
   }
 
+  const subtotal = getCartTotal();
+  const shipping = 0;
+  const tax = 0;
+  const total = subtotal + shipping + tax;
+  const paymentMethods = [
+    { id: 'card', label: 'Card' },
+    { id: 'paypal', label: 'PayPal' },
+    { id: 'bank', label: 'Bank Transfer' },
+    { id: 'wallet', label: 'Wallet' },
+  ];
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const orderNumber = `ORDER-${Date.now().toString().slice(-8)}`;
+    clearCart();
+    toast.success('Order submitted.');
+    navigate(`/order-confirmation?order=${orderNumber}`);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
+    <div className="section-shell py-8 md:py-12">
+      <section data-reveal className="mb-8 rounded-[36px] bg-[linear-gradient(135deg,#111827_0%,#1a1a2e_48%,#e94560_130%)] p-8 text-white md:p-10">
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#f0a500]">Checkout</p>
+        <h1 className="font-heading mt-4 text-4xl font-bold md:text-5xl">Finish your droppfive order</h1>
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-white/75">
+          Clean form fields, visible totals, and secure payment options help customers complete their purchase with confidence.
+        </p>
+      </section>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Checkout Form */}
-          <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Contact Information */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Contact Information</h2>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="you@example.com" required />
+      <div className="grid gap-8 lg:grid-cols-[1.12fr_0.88fr]">
+        <form data-reveal onSubmit={handleSubmit} className="space-y-6">
+          <section className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_18px_60px_rgba(15,23,42,0.05)]">
+            <h2 className="font-heading text-2xl font-semibold text-slate-950">Contact</h2>
+            <div className="mt-5">
+              <Label htmlFor="email">Email address</Label>
+              <Input id="email" type="email" placeholder="Email address" required className="mt-2 h-12 rounded-2xl" />
+            </div>
+          </section>
+
+          <section className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_18px_60px_rgba(15,23,42,0.05)]">
+            <h2 className="font-heading text-2xl font-semibold text-slate-950">Shipping details</h2>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <div>
+                <Label htmlFor="firstName">First name</Label>
+                <Input id="firstName" placeholder="First name" required className="mt-2 h-12 rounded-2xl" />
+              </div>
+              <div>
+                <Label htmlFor="lastName">Last name</Label>
+                <Input id="lastName" placeholder="Last name" required className="mt-2 h-12 rounded-2xl" />
+              </div>
+              <div className="sm:col-span-2">
+                <Label htmlFor="address">Street address</Label>
+                <Input id="address" placeholder="Street address" required className="mt-2 h-12 rounded-2xl" />
+              </div>
+              <div>
+                <Label htmlFor="city">City</Label>
+                <Input id="city" placeholder="City" required className="mt-2 h-12 rounded-2xl" />
+              </div>
+              <div>
+                <Label htmlFor="state">State / Region</Label>
+                <Input id="state" placeholder="State / Region" required className="mt-2 h-12 rounded-2xl" />
+              </div>
+              <div>
+                <Label htmlFor="zipCode">Postal code</Label>
+                <Input id="zipCode" placeholder="Postal code" required className="mt-2 h-12 rounded-2xl" />
+              </div>
+              <div>
+                <Label htmlFor="country">Country</Label>
+                <Input id="country" placeholder="Country" required className="mt-2 h-12 rounded-2xl" />
+              </div>
+              <div className="sm:col-span-2">
+                <Label htmlFor="phone">Phone number</Label>
+                <Input id="phone" type="tel" placeholder="Phone number" required className="mt-2 h-12 rounded-2xl" />
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_18px_60px_rgba(15,23,42,0.05)]">
+            <h2 className="font-heading text-2xl font-semibold text-slate-950">Payment</h2>
+            <div className="mt-5 grid gap-3 md:grid-cols-4">
+              {paymentMethods.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => setPaymentMethod(option.id)}
+                  className={`rounded-2xl border px-4 py-3 text-sm font-semibold transition ${
+                    paymentMethod === option.id
+                      ? 'border-slate-950 bg-slate-950 text-white'
+                      : 'border-slate-200 bg-slate-50 text-slate-700'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+
+            {paymentMethod === 'card' ? (
+              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                <div className="sm:col-span-2">
+                  <Label htmlFor="cardNumber">Card number</Label>
+                  <div className="relative mt-2">
+                    <Input id="cardNumber" placeholder="Card number" required className="h-12 rounded-2xl pr-12" />
+                    <CreditCard className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                   </div>
+                </div>
+                <div>
+                  <Label htmlFor="expiryDate">Expiry date</Label>
+                  <Input id="expiryDate" placeholder="MM/YY" required className="mt-2 h-12 rounded-2xl" />
+                </div>
+                <div>
+                  <Label htmlFor="cvv">CVV</Label>
+                  <Input id="cvv" placeholder="CVV" required className="mt-2 h-12 rounded-2xl" />
+                </div>
+                <div className="sm:col-span-2">
+                  <Label htmlFor="cardName">Name on card</Label>
+                  <Input id="cardName" placeholder="Name on card" required className="mt-2 h-12 rounded-2xl" />
                 </div>
               </div>
-
-              {/* Shipping Address */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Shipping Address</h2>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" placeholder="John" required />
-                    </div>
-                    <div>
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" placeholder="Doe" required />
-                    </div>
-                  </div>
-                  <div>
-                    <Label htmlFor="address">Address</Label>
-                    <Input id="address" placeholder="123 Main St" required />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="city">City</Label>
-                      <Input id="city" placeholder="New York" required />
-                    </div>
-                    <div>
-                      <Label htmlFor="state">State</Label>
-                      <Input id="state" placeholder="NY" required />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="zipCode">ZIP Code</Label>
-                      <Input id="zipCode" placeholder="10001" required />
-                    </div>
-                    <div>
-                      <Label htmlFor="country">Country</Label>
-                      <Input id="country" placeholder="United States" required />
-                    </div>
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" required />
-                  </div>
-                </div>
+            ) : (
+              <div className="mt-5 rounded-[24px] bg-slate-50 p-5 text-sm leading-7 text-slate-600">
+                You’ll be redirected to complete your payment after confirming the order.
               </div>
+            )}
 
-              {/* Payment Method */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Payment Method</h2>
-                
-                {/* Payment Options */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod('card')}
-                    className={`p-3 border-2 rounded-lg text-sm font-medium transition-colors ${
-                      paymentMethod === 'card'
-                        ? 'border-gray-900 bg-gray-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    💳 Card
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod('paypal')}
-                    className={`p-3 border-2 rounded-lg text-sm font-medium transition-colors ${
-                      paymentMethod === 'paypal'
-                        ? 'border-gray-900 bg-gray-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    PayPal
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod('apple')}
-                    className={`p-3 border-2 rounded-lg text-sm font-medium transition-colors ${
-                      paymentMethod === 'apple'
-                        ? 'border-gray-900 bg-gray-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                     Apple Pay
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod('google')}
-                    className={`p-3 border-2 rounded-lg text-sm font-medium transition-colors ${
-                      paymentMethod === 'google'
-                        ? 'border-gray-900 bg-gray-50'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    G Pay
-                  </button>
-                </div>
+            <div className="mt-6 flex items-start gap-3 rounded-[24px] bg-emerald-50 p-4 text-sm text-emerald-800">
+              <CheckCircle2 className="mt-0.5 h-5 w-5" />
+              <p>All transactions are encrypted and protected by secure checkout standards.</p>
+            </div>
+          </section>
 
-                {/* Card Details */}
-                {paymentMethod === 'card' && (
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="cardNumber">Card Number</Label>
-                      <div className="relative">
-                        <Input
-                          id="cardNumber"
-                          placeholder="1234 5678 9012 3456"
-                          required
-                        />
-                        <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="expiryDate">Expiry Date</Label>
-                        <Input id="expiryDate" placeholder="MM/YY" required />
-                      </div>
-                      <div>
-                        <Label htmlFor="cvv">CVV</Label>
-                        <Input id="cvv" placeholder="123" maxLength={4} required />
-                      </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="cardName">Name on Card</Label>
-                      <Input id="cardName" placeholder="John Doe" required />
-                    </div>
+          <Button type="submit" className="h-12 w-full rounded-full bg-slate-950 text-white hover:bg-[#e94560]">
+            <Lock className="mr-2 h-4 w-4" />
+            Place order for ${total.toFixed(2)}
+          </Button>
+        </form>
+
+        <aside data-reveal className="lg:sticky lg:top-24 lg:self-start">
+          <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_18px_60px_rgba(15,23,42,0.06)]">
+            <h2 className="font-heading text-2xl font-semibold text-slate-950">Order summary</h2>
+
+            <div className="mt-6 space-y-4">
+              {items.map((item) => (
+                <div key={item.product.id} className="flex gap-4">
+                  <img
+                    src={item.product.image}
+                    alt={item.product.name}
+                    className="h-20 w-20 rounded-[20px] object-cover"
+                  />
+                  <div className="flex-1">
+                    <p className="font-semibold text-slate-950">{item.product.name}</p>
+                    <p className="mt-1 text-sm text-slate-500">Qty {item.quantity}</p>
+                    <p className="mt-2 text-sm text-slate-400">{item.product.category}</p>
                   </div>
-                )}
-
-                {paymentMethod !== 'card' && (
-                  <div className="text-center py-8 text-gray-600">
-                    You will be redirected to complete your {paymentMethod} payment.
-                  </div>
-                )}
-              </div>
-
-              {/* Submit */}
-              <Button type="submit" size="lg" className="w-full bg-gray-900 hover:bg-gray-800">
-                <Lock className="h-5 w-5 mr-2" />
-                Place Order - ${total.toFixed(2)}
-              </Button>
-
-              <p className="text-sm text-gray-600 text-center">
-                By placing your order, you agree to our Terms of Service and Privacy Policy.
-              </p>
-            </form>
-          </div>
-
-          {/* Order Summary */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
-
-              {/* Items */}
-              <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
-                {items.map(item => (
-                  <div key={item.product.id} className="flex gap-4">
-                    <img
-                      src={item.product.image}
-                      alt={item.product.name}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900 text-sm">{item.product.name}</p>
-                      <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
-                    </div>
-                    <p className="font-semibold text-gray-900">
-                      ${(item.product.price * item.quantity).toFixed(2)}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="border-t pt-4 space-y-2 mb-4">
-                <div className="flex justify-between text-gray-700">
-                  <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <p className="font-semibold text-slate-950">${(item.product.minPrice * item.quantity).toFixed(2)}</p>
                 </div>
-                <div className="flex justify-between text-gray-700">
-                  <span>Shipping</span>
-                  <span className={shipping === 0 ? 'text-green-600 font-semibold' : ''}>
-                    {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
-                  </span>
-                </div>
-              </div>
+              ))}
+            </div>
 
-              <div className="border-t pt-4">
-                <div className="flex justify-between text-lg font-bold text-gray-900">
-                  <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
-                </div>
+            <div className="mt-6 space-y-3 border-t border-slate-200 pt-5 text-sm text-slate-600">
+              <div className="flex justify-between">
+                <span>Subtotal</span>
+                <span className="font-semibold text-slate-950">${subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Shipping</span>
+                <span className="font-semibold text-slate-950">{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Estimated tax</span>
+                <span className="font-semibold text-slate-950">${tax.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div className="mt-6 border-t border-slate-200 pt-5">
+              <div className="flex items-center justify-between">
+                <span className="text-lg font-semibold text-slate-950">Total</span>
+                <span className="text-3xl font-bold text-slate-950">${total.toFixed(2)}</span>
               </div>
             </div>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   );
